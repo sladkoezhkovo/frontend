@@ -1,15 +1,15 @@
-import axios, {AxiosError} from "axios";
-import {TimeoutError} from "../errors/forbidden.ts";
+import axios, { AxiosError } from 'axios'
+import { AuthDto, Response } from '../types/dto.ts'
 
-const BASE_URL = "http://127.0.0.1:8000/api"
+const BASE_URL = 'http://127.0.0.1:8000/api'
 
 const api = axios.create({
     baseURL: BASE_URL,
-    timeout: 1000,
+    withCredentials: true,
 })
 
 api.interceptors.request.use((config) => {
-    const access = localStorage.getItem("access_token")
+    const access = localStorage.getItem('access_token')
     if (access) {
         config.headers.Authorization = `Bearer ${access}`
     }
@@ -20,17 +20,36 @@ api.interceptors.response.use(
     (response) => {
         return response
     },
-    (error) => {
+    async (error) => {
         if (error instanceof AxiosError) {
-            if (error.response != null) {
-                const status = error.response.status
-                console.log("response status", status)
-                if(status == 403) {
-                    api.post("/refresh", {}, {withCredentials: true})
+            const originalRequest = error.config!
+            if (
+                error.response &&
+                error.response.status == 401 &&
+                error.config &&
+                // @ts-ignore
+                !error.config._isRetry
+            ) {
+                // @ts-ignore
+                originalRequest._isRetry = true
+                try {
+                    const response = await axios.get<Response<AuthDto>>(
+                        `${BASE_URL}/refresh`,
+                        {
+                            withCredentials: true,
+                        }
+                    )
+                    localStorage.setItem(
+                        'access_token',
+                        response.data.data.accessToken
+                    )
+                    return api.request(originalRequest)
+                } catch (e) {
+                    console.log('НЕ АВТОРИЗОВАН')
                 }
             }
         }
-        return error;
+        throw error
     }
 )
 

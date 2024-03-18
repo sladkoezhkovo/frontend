@@ -1,6 +1,7 @@
-import {Navigate, Outlet, useLocation, useNavigate} from "react-router-dom";
-import {useAuth} from "../hooks/useAuth.ts";
-import {Center, Spinner, useToast} from "@chakra-ui/react";
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth.ts'
+import { Center, Spinner, useToast } from '@chakra-ui/react'
+import { Loading } from '../components/Loading.tsx'
 
 const AdminZone = () => {
     const navigate = useNavigate()
@@ -10,28 +11,24 @@ const AdminZone = () => {
     const handleError = (err: Error) => {
         toast({
             title: err.message,
-            status: "error",
+            status: 'error',
             isClosable: true,
-            position: "bottom-left",
+            position: 'bottom-left',
         })
-        navigate("/")
+        navigate('/')
     }
 
-    const {isError, isLoading} = useAuth(1, handleError)
+    const { isError, isLoading } = useAuth(1, handleError)
 
-    if(isLoading) {
-        return (
-            <Center>
-                <Spinner thickness="4px" size="xl" />
-            </Center>
-        )
+    if (isLoading) {
+        return <Loading />
     }
 
-    if(isError) {
-        return <Navigate to='/' state={{from: location}}/>
+    if (isError) {
+        return <Navigate to="/" state={{ from: location }} />
     }
 
-    return <Outlet/>;
+    return <Outlet />
 }
 
-export {AdminZone}
+export { AdminZone }
