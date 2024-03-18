@@ -1,12 +1,15 @@
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.ts'
-import { Center, Spinner, useToast } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
 import { Loading } from '../components/Loading.tsx'
+import { useUserStore } from '../zustand/store.ts'
 
 const AdminZone = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const toast = useToast()
+
+    const logout = useUserStore((state) => state.logout)
 
     const handleError = (err: Error) => {
         toast({
@@ -15,6 +18,7 @@ const AdminZone = () => {
             isClosable: true,
             position: 'bottom-left',
         })
+        logout()
         navigate('/')
     }
 

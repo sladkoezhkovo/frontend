@@ -36,8 +36,6 @@ const UsersTable = () => {
         staleTime: 20000,
     })
 
-    console.log(data)
-
     if (isLoading) {
         return <Loading />
     }
@@ -64,7 +62,7 @@ const UsersTable = () => {
                     <Thead>
                         <Th>ID</Th>
                         <Th>Email</Th>
-                        <Th>Role</Th>
+                        <Th>Роль</Th>
                     </Thead>
                     <Tbody>
                         {data &&

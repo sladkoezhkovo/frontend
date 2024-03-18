@@ -23,8 +23,6 @@ export async function logout() {
 
 export async function checkAuth(roleId: number) {
     const r = await api.post(`/auth?role_id=${roleId}`)
-
-    return true
 }
 
 export async function refresh() {
