@@ -7,7 +7,8 @@ import { HomePage } from './pages/HomePage.tsx'
 import { DashboardPage } from './pages/DashboardPage.tsx'
 import { LoginPage } from './pages/LoginPage.tsx'
 
-import 'react-toastify/dist/ReactToastify.css'
+import UserPage from './pages/EntityPages/UserPage.tsx'
+import RolePage from './pages/EntityPages/RolePage.tsx'
 
 function App() {
     return (
@@ -17,6 +18,14 @@ function App() {
                     <Route index element={<HomePage />} />
                     <Route element={<AdminZone />}>
                         <Route path="/admin" element={<DashboardPage />} />
+                        <Route
+                            path={'/admin/users/:id'}
+                            element={<UserPage />}
+                        />
+                        <Route
+                            path={'/admin/roles/:id'}
+                            element={<RolePage />}
+                        />
                     </Route>
                     <Route path="/sign-in" element={<LoginPage />} />
                 </Route>

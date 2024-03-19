@@ -1,17 +1,15 @@
-import {defineStyleConfig, extendTheme} from '@chakra-ui/react'
+import { defineStyleConfig, extendTheme } from '@chakra-ui/react'
 
 const baseStyle = {
     borderRadius: 'md', // add a border radius
     fontWeight: 'medium', // change the font weight
-    maxW: "container.xl",
-    py: "12px",
+    maxW: 'container.xl',
+    py: '12px',
 }
 
 export const containerTheme = defineStyleConfig({ baseStyle })
 export const buttonTheme = defineStyleConfig({
-    baseStyle: {
-        shadow: "md",
-    },
+    baseStyle: {},
 })
 
 const theme = extendTheme({

@@ -18,7 +18,6 @@ const AdminZone = () => {
             isClosable: true,
             position: 'bottom-left',
         })
-        logout()
         navigate('/')
     }
 
@@ -29,6 +28,7 @@ const AdminZone = () => {
     }
 
     if (isError) {
+        // logout()
         return <Navigate to="/" state={{ from: location }} />
     }
 
