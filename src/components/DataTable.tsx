@@ -15,6 +15,7 @@ import {
     TableRow,
     Typography,
 } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { Link } from '@/components/Link.tsx'
 import { useTableStateStore } from '@/zustand/store.ts'
 import { useEffect } from 'react'
@@ -98,6 +99,7 @@ const DataTable = ({ columns, rows, count, onPageChange, onDelete }: props) => {
                                     {col.title}
                                 </TableCell>
                             ))}
+                            {onDelete && <TableCell>Действия</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -122,7 +124,7 @@ const DataTable = ({ columns, rows, count, onPageChange, onDelete }: props) => {
                                             color="error"
                                             onClick={() => onDelete(row)}
                                         >
-                                            D
+                                            <DeleteIcon />
                                         </Button>
                                     </TableCell>
                                 )}

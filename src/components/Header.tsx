@@ -7,6 +7,7 @@ import { Link } from '@/components/Link'
 
 import Logo from '@/assets/sladkoezhkovo.svg'
 import { AdminHeader } from '@/components/AdminHeader.tsx'
+import LogoutIcon from '@mui/icons-material/Logout'
 
 interface props {
     isAdmin: boolean
@@ -33,41 +34,38 @@ export const Header = ({ isAdmin }: props) => {
     })
 
     return (
-        <Container
-            sx={{
-                py: 4,
-                width: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-            }}
-        >
-            <Link to={'/'}>
-                <img src={Logo} alt={'sladkoezhkovo.'} />
-            </Link>
+        <Box sx={{ w: 1, boxShadow: 2, py: 3, mb: 2 }}>
+            <Container
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                }}
+            >
+                <Link to={'/'}>
+                    <img src={Logo} alt={'sladkoezhkovo.'} />
+                </Link>
 
-            {isAdmin && <AdminHeader />}
+                {isAdmin && <AdminHeader />}
 
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {email ? (
-                    <>
-                        <Typography sx={{ mr: 2 }}>{email}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {email ? (
+                        <>
+                            <Typography sx={{ mr: 2 }}>{email}</Typography>
+                            <Button onClick={() => logoutFn()}>
+                                <LogoutIcon />
+                            </Button>
+                        </>
+                    ) : (
                         <Button
                             variant={'contained'}
-                            onClick={() => logoutFn()}
+                            onClick={() => navigate('/sign-in')}
                         >
-                            Выход
+                            Авторизоваться
                         </Button>
-                    </>
-                ) : (
-                    <Button
-                        variant={'contained'}
-                        onClick={() => navigate('/sign-in')}
-                    >
-                        Авторизоваться
-                    </Button>
-                )}
-            </Box>
-        </Container>
+                    )}
+                </Box>
+            </Container>
+        </Box>
     )
 }
