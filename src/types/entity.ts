@@ -8,3 +8,8 @@ export interface RoleEntry {
     id: number
     name: string
 }
+
+export interface CityEntry {
+    id: number
+    name: string
+}

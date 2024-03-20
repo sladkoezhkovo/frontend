@@ -1,72 +1,77 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
-import { UsersTable } from '../components/tables/UsersTable.tsx'
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Table } from '../components/Table.tsx'
-import { RolesTable } from '../components/tables/RolesTable.tsx'
-import { getUsers } from '../service/users.ts'
-import { getRoles } from '../service/roles.ts'
+import {
+    Box,
+    Button,
+    Container,
+    List,
+    ListItem,
+    Typography,
+} from '@mui/material'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { useSelectedTableStore, useTableStateStore } from '@/zustand/store.ts'
+
+const tables = [
+    {
+        key: 'users',
+        name: 'Пользователи',
+    },
+    {
+        key: 'roles',
+        name: 'Роли',
+    },
+    {
+        key: 'cities',
+        name: 'Города',
+    },
+]
 
 const DashboardPage = () => {
-    const [tabIndex, setTabIndex] = useState(0)
+    const { table: selected, update } = useSelectedTableStore()
 
-    const location = useLocation()
+    const reset = useTableStateStore((state) => state.reset)
 
-    useEffect(() => {
-        if (location.hash) {
-            const n = Number(location.hash.replace('#', ''))
-            setTabIndex(n)
-        }
-    }, [])
+    const navigate = useNavigate()
 
-    const changeTabIndex = (index: number) => {
-        location.hash = `#${index}`
-        setTabIndex(index)
+    const select = (table: string) => {
+        update(table)
+        navigate(table)
+        reset()
     }
 
+    const isSelected = (t: string) => selected == t
+
     return (
-        <>
-            <Box>
-                <Tabs onChange={changeTabIndex} index={tabIndex}>
-                    <TabList>
-                        <Tab>Пользователи</Tab>
-                        <Tab>Роли</Tab>
-                        <Tab>Города</Tab>
-                        <Tab>Районы</Tab>
-                    </TabList>
-                    <TabPanels>
-                        <TabPanel>
-                            <Table
-                                name={'users'}
-                                contentFn={(limit, page, setCount) => (
-                                    <UsersTable
-                                        setCount={setCount}
-                                        queryFn={() =>
-                                            getUsers(limit, (page - 1) * limit)
-                                        }
-                                    />
-                                )}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            <Table
-                                name={'roles'}
-                                contentFn={(limit, page, setCount) => (
-                                    <RolesTable
-                                        setCount={setCount}
-                                        queryFn={() =>
-                                            getRoles(limit, (page - 1) * limit)
-                                        }
-                                    />
-                                )}
-                            />
-                        </TabPanel>
-                        <TabPanel>Города</TabPanel>
-                        <TabPanel>Районы</TabPanel>
-                    </TabPanels>
-                </Tabs>
+        <Container>
+            <Box className="shadow-lg" sx={{ py: 2, px: 4, mb: 4 }}>
+                <Typography variant={'h5'}>Выбор таблицы</Typography>
+                <Box sx={{ display: 'flex' }}>
+                    <List sx={{ display: 'flex', gap: 2 }}>
+                        {tables.map((t) => (
+                            <ListItem key={t.key} sx={{ p: 0 }}>
+                                <Button
+                                    disabled={isSelected(t.key)}
+                                    variant={
+                                        isSelected(t.key)
+                                            ? 'outlined'
+                                            : 'contained'
+                                    }
+                                    onClick={() => select(t.key)}
+                                >
+                                    {t.name}
+                                </Button>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
             </Box>
-        </>
+
+            <Box className="shadow-lg" sx={{ py: 2, px: 4 }}>
+                {isSelected('') ? (
+                    <Typography variant={'h4'}>Таблица не выбрана</Typography>
+                ) : (
+                    <Outlet />
+                )}
+            </Box>
+        </Container>
     )
 }
 

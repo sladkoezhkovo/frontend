@@ -1,8 +1,9 @@
 import api from '../api/api.ts'
-import { GetUserDto, GetUsersDto, Response } from '../types/dto.ts'
+import { GetUserDto, ListDto, Response } from '../types/dto.ts'
+import { UserEntry } from '@/types/entity.ts'
 
 export async function getUsers(limit: number, offset: number) {
-    const res = await api.get<Response<GetUsersDto>>(
+    const res = await api.get<Response<ListDto<UserEntry>>>(
         `/users?limit=${limit}&offset=${offset}`
     )
 
@@ -14,7 +15,7 @@ export async function getUsersByRole(
     limit: number,
     offset: number
 ) {
-    const res = await api.get<Response<GetUsersDto>>(
+    const res = await api.get<Response<ListDto<UserEntry>>>(
         `/users?roleId=${roleId}&limit=${limit}&offset=${offset}`
     )
 

@@ -1,11 +1,5 @@
-import {VStack} from "@chakra-ui/react";
-
 const HomePage = () => {
-    return (
-        <VStack>
+    return <div></div>
+}
 
-        </VStack>
-    );
-};
-
-export {HomePage};
+export { HomePage }

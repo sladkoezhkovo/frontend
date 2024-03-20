@@ -1,19 +1,21 @@
-import {Outlet} from "react-router-dom";
-import Header from "../components/Header.tsx";
-import {Container} from "@chakra-ui/react";
+import { Outlet } from 'react-router-dom'
+import { Box, Container } from '@mui/material'
+import { Header } from '@/components/Header'
 
-function AppLayout() {
+// interface props {
+//     isAdmin: boolean
+// }
+
+export function AppLayout() {
     return (
-        <div className="flex flex-col items-center w-full">
-            <Header/>
+        <Box>
+            <Header isAdmin={true} />
             <Container className="mb-24">
-                <Outlet/>
+                <Outlet />
             </Container>
             <footer className="flex justify-center">
-                2024 &copy; rE
+                2024 &copy; Evteev Dmitry
             </footer>
-        </div>
-    );
+        </Box>
+    )
 }
-
-export default AppLayout;

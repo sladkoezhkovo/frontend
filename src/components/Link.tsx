@@ -1,5 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom'
-import { Link as ChakraLink } from '@chakra-ui/react'
+import { Link as MuiLink } from '@mui/material'
 import { ReactNode } from 'react'
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 export const Link = ({ children, ...props }: Props) => {
     return (
         <RouterLink {...props}>
-            <ChakraLink>{children}</ChakraLink>
+            <MuiLink>{children}</MuiLink>
         </RouterLink>
     )
 }

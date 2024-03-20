@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query'
 import { getUser } from '../../service/users.ts'
+import { getRole } from '../../service/roles.ts'
 
 export const useUser = (userId: number, onError: (err: Error) => void) => {
     return useQuery({
@@ -10,6 +11,12 @@ export const useUser = (userId: number, onError: (err: Error) => void) => {
                 onError(err)
             }
         },
-        retry: false,
+    })
+}
+
+export const useRole = (roleId: number) => {
+    return useQuery({
+        queryFn: () => getRole(roleId),
+        queryKey: ['roles', roleId],
     })
 }

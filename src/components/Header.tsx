@@ -1,64 +1,73 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { Button, Flex, Image, useToast } from '@chakra-ui/react'
-import { useUserStore } from '../zustand/store.ts'
-import { useMutation } from 'react-query'
-import { logout, refresh } from '../service/auth.ts'
-import Logo from '../assets/sladkoezhkovo.svg'
-const Header = () => {
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '@/zustand/store'
+import { logout } from '@/service/auth'
+import { Box, Button, Container, Typography } from '@mui/material'
+import { Link } from '@/components/Link'
+
+import Logo from '@/assets/sladkoezhkovo.svg'
+import { AdminHeader } from '@/components/AdminHeader.tsx'
+
+interface props {
+    isAdmin: boolean
+}
+
+export const Header = ({ isAdmin }: props) => {
     const email = useUserStore((state) => state.email)
     const logoutState = useUserStore((state) => state.logout)
 
-    const toast = useToast()
+    const queryClient = useQueryClient()
 
     const navigate = useNavigate()
-
-    const { mutate: refreshFn } = useMutation({
-        mutationFn: refresh,
-        onError: (error) => {
-            toast({
-                title: 'cannot refresh: ' + error.message,
-                position: 'bottom-left',
-                status: 'error',
-            })
-        },
-    })
 
     const { mutate: logoutFn } = useMutation({
         mutationFn: logout,
         onSuccess: () => {
+            console.log('logout')
             logoutState()
+
+            queryClient.fetchQuery(['auth'])
+
             navigate('/')
         },
     })
 
     return (
-        <header className=" flex justify-center py-6 mb-24 border-b-2 w-full shadow-xl">
-            <div className="flex justify-between w-10/12 items-center">
-                <Link to="/">
-                    <Image src={Logo} alt="sladkoezhkovo." />
-                </Link>
-                <Link to="/admin">
-                    <Button>Админка</Button>
-                </Link>
+        <Container
+            sx={{
+                py: 4,
+                width: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+            }}
+        >
+            <Link to={'/'}>
+                <img src={Logo} alt={'sladkoezhkovo.'} />
+            </Link>
 
+            {isAdmin && <AdminHeader />}
+
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 {email ? (
-                    <Flex alignItems={'center'}>
-                        <h2>{email}</h2>
-                        <Button className="ml-4" onClick={() => logoutFn()}>
+                    <>
+                        <Typography sx={{ mr: 2 }}>{email}</Typography>
+                        <Button
+                            variant={'contained'}
+                            onClick={() => logoutFn()}
+                        >
                             Выход
                         </Button>
-                        <Button className="ml-4" onClick={() => refreshFn()}>
-                            Refresh
-                        </Button>
-                    </Flex>
+                    </>
                 ) : (
-                    <Link to="/sign-in">
-                        <Button>Авторизоваться</Button>
-                    </Link>
+                    <Button
+                        variant={'contained'}
+                        onClick={() => navigate('/sign-in')}
+                    >
+                        Авторизоваться
+                    </Button>
                 )}
-            </div>
-        </header>
+            </Box>
+        </Container>
     )
 }
-
-export default Header

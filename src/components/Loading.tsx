@@ -1,10 +1,18 @@
-import { Center, Spinner } from '@chakra-ui/react'
+import { CircularProgress, Container } from '@mui/material'
 
 const Loading = () => {
     return (
-        <Center>
-            <Spinner thickness="4px" size="xl" />
-        </Center>
+        <Container
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                py: 2,
+                bg: 'white',
+            }}
+        >
+            <CircularProgress />
+        </Container>
     )
 }
 
