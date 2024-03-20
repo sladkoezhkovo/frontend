@@ -1,15 +1,22 @@
-import api from '../api/api.ts'
-import { GetRoleDto, GetRolesDto, Response } from '../types/dto.ts'
+import api from '@/api/api.ts'
+import { Dto, ListDto } from '@/types/dto.ts'
+import { RoleEntry } from '@/types/entity.ts'
 
-export async function getRoles(limit: number, offset: number) {
-    const res = await api.get<Response<GetRolesDto>>(
-        `/roles?limit=${limit}&offset=${offset}`
-    )
+export class RoleService {
+    static async getRoles(limit: number, offset: number) {
+        const res = await api.get<Dto<ListDto<RoleEntry>>>(
+            `/roles?limit=${limit}&offset=${offset}`
+        )
 
-    return res.data.data
-}
+        return res.data.data
+    }
 
-export async function getRole(id: number) {
-    const res = await api.get<Response<GetRoleDto>>(`/roles/${id}`)
-    return res.data.data
+    static async getRole(id: number) {
+        const res = await api.get<Dto<RoleEntry>>(`/roles/${id}`)
+        return res.data.data
+    }
+
+    static async deleteRole(id: number) {
+        await api.delete(`/roles/${id}`)
+    }
 }

@@ -1,5 +1,6 @@
 import {
     Box,
+    Button,
     Container,
     FormControl,
     InputLabel,
@@ -31,12 +32,10 @@ interface props {
     rows: unknown[]
     count: number
     onPageChange: () => void
+    onDelete?: (entry: any) => void
 }
 
-const DataTable = ({ columns, rows, count, onPageChange }: props) => {
-    // const [limit, setLimit] = useState(10)
-    // const [page, setPage] = useState(1)
-
+const DataTable = ({ columns, rows, count, onPageChange, onDelete }: props) => {
     const { limit, page, setLimit, setPage } = useTableStateStore()
 
     const handleLimitChange = (v: number) => {
@@ -107,7 +106,9 @@ const DataTable = ({ columns, rows, count, onPageChange }: props) => {
                                 {columns.map((col) => (
                                     <TableCell key={col.field}>
                                         {col.link ? (
-                                            <Link to={col.link}>
+                                            <Link
+                                                to={`${col.link}/${row['id']}`}
+                                            >
                                                 {row[col.field]}
                                             </Link>
                                         ) : (
@@ -115,6 +116,16 @@ const DataTable = ({ columns, rows, count, onPageChange }: props) => {
                                         )}
                                     </TableCell>
                                 ))}
+                                {onDelete && (
+                                    <TableCell>
+                                        <Button
+                                            color="error"
+                                            onClick={() => onDelete(row)}
+                                        >
+                                            D
+                                        </Button>
+                                    </TableCell>
+                                )}
                             </TableRow>
                         ))}
                     </TableBody>

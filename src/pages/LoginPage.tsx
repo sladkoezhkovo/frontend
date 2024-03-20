@@ -2,18 +2,14 @@ import { useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useUserStore } from '@/zustand/store.ts'
-import { signIn } from '@/service/auth'
+import { AuthService } from '@/service/auth'
 import {
     Box,
     Button,
     FormControl,
     FormHelperText,
-    FormLabel,
-    Input,
     Container,
     TextField,
-    Card,
-    Typography,
 } from '@mui/material'
 
 function LoginPage() {
@@ -27,10 +23,11 @@ function LoginPage() {
     const update = useUserStore((state) => state.update)
 
     const { mutate } = useMutation({
-        mutationFn: () => signIn(email, password),
+        mutationFn: () => AuthService.signIn(email, password),
         onSuccess: () => {
             setError(null)
             update(email)
+            queryClient.fetchQuery(['auth'])
             navigate(state ? state.from : '/')
         },
         onError: (err) => {
@@ -54,7 +51,6 @@ function LoginPage() {
         if (!isError) {
             mutate()
         }
-        queryClient.fetchQuery(['auth'])
     }
 
     const validateEmail = (email: string) => {

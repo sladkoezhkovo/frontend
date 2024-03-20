@@ -6,7 +6,7 @@ import {
     DataTable,
     DataTableColumnDefinition,
 } from '@/components/DataTable.tsx'
-import { getCities } from '@/service/cities.ts'
+import { CityService, getCities } from '@/service/cities.ts'
 
 const columns: DataTableColumnDefinition[] = [
     {
@@ -26,7 +26,7 @@ const RolesPage = () => {
     const page = useTableStateStore((state) => state.page)
 
     const { data, isLoading, refetch } = useQuery({
-        queryFn: () => getCities(limit, (page - 1) * limit),
+        queryFn: () => CityService.getCities(limit, (page - 1) * limit),
         queryKey: ['cities', { limit, page }],
     })
 

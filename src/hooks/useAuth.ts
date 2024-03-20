@@ -1,7 +1,7 @@
 // REDUX
 
 import { useQuery } from 'react-query'
-import { checkAuth } from '../service/auth.ts'
+import { AuthService } from '../service/auth.ts'
 import { RequestError } from '../errors/forbidden.ts'
 
 export const useAuth = (
@@ -9,10 +9,10 @@ export const useAuth = (
     onError: (err: RequestError) => void
 ) => {
     return useQuery({
-        queryFn: () => checkAuth(roleId),
+        queryFn: () => AuthService.checkAuth(roleId),
         queryKey: ['auth'],
         onError: (err) => {
-            if (err instanceof RequestError) {
+            if (err instanceof Error) {
                 onError(err)
             }
         },

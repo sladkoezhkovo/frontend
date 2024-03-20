@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query'
-import { getUser } from '../../service/users.ts'
-import { getRole } from '../../service/roles.ts'
+import { UserService } from '@/service/users.ts'
+import { RoleService } from '@/service/roles.ts'
 
 export const useUser = (userId: number, onError: (err: Error) => void) => {
     return useQuery({
-        queryFn: () => getUser(userId),
+        queryFn: () => UserService.getUser(userId),
         queryKey: ['user', userId],
         onError: (err) => {
             if (err instanceof Error) {
@@ -16,7 +16,7 @@ export const useUser = (userId: number, onError: (err: Error) => void) => {
 
 export const useRole = (roleId: number) => {
     return useQuery({
-        queryFn: () => getRole(roleId),
+        queryFn: () => RoleService.getRole(roleId),
         queryKey: ['roles', roleId],
     })
 }

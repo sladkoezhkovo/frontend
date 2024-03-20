@@ -1,29 +1,27 @@
 import api from '../api/api.ts'
-import { GetUserDto, ListDto, Response } from '../types/dto.ts'
+import { GetUserDto, ListDto, Dto } from '../types/dto.ts'
 import { UserEntry } from '@/types/entity.ts'
 
-export async function getUsers(limit: number, offset: number) {
-    const res = await api.get<Response<ListDto<UserEntry>>>(
-        `/users?limit=${limit}&offset=${offset}`
-    )
+export class UserService {
+    static async getUsers(limit: number, offset: number) {
+        const res = await api.get<Dto<ListDto<UserEntry>>>(
+            `/users?limit=${limit}&offset=${offset}`
+        )
 
-    return res.data.data
-}
+        return res.data.data
+    }
 
-export async function getUsersByRole(
-    roleId: number,
-    limit: number,
-    offset: number
-) {
-    const res = await api.get<Response<ListDto<UserEntry>>>(
-        `/users?roleId=${roleId}&limit=${limit}&offset=${offset}`
-    )
+    static async getUsersByRole(roleId: number, limit: number, offset: number) {
+        const res = await api.get<Dto<ListDto<UserEntry>>>(
+            `/users?roleId=${roleId}&limit=${limit}&offset=${offset}`
+        )
 
-    return res.data.data
-}
+        return res.data.data
+    }
 
-export async function getUser(id: number) {
-    const res = await api.get<Response<GetUserDto>>(`/users/${id}`)
+    static async getUser(id: number) {
+        const res = await api.get<Dto<GetUserDto>>(`/users/${id}`)
 
-    return res.data.data
+        return res.data.data
+    }
 }

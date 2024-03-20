@@ -10,6 +10,7 @@ export const AdminZone = () => {
     const logout = useUserStore((state) => state.logout)
 
     const handleError = (err: Error) => {
+        console.log('HANDLE ERROR:', err)
         logout()
         navigate('/')
     }

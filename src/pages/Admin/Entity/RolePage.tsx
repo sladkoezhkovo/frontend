@@ -1,11 +1,13 @@
 import { useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
+import { Loading } from '@/components/Loading.tsx'
+import { RoleService } from '@/service/roles.ts'
 
 const RolePage = () => {
     const { id } = useParams()
 
-    const { data, isLoading, isError } = useQuery({
-        queryFn: () => getRole(Number(id)),
+    const { data, isLoading } = useQuery({
+        queryFn: () => RoleService.getRole(Number(id)),
         queryKey: ['roles', id],
         retry: false,
     })
@@ -13,17 +15,6 @@ const RolePage = () => {
         return <Loading />
     }
 
-    if (isError) {
-        // return (
-        //     <Card>
-        //         <Flex>
-        //             <Container border="thin">
-        //                 <Text>Пользователь не найден</Text>
-        //             </Container>
-        //         </Flex>
-        //     </Card>
-        // )
-    }
 
     return (
         <>
@@ -32,10 +23,10 @@ const RolePage = () => {
                     <Container border="thin">
                         <Breadcrumb spacing={2}>
                             <BreadcrumbItem>
-                                <Link to={'/Admin#1'}>Роли</Link>
+                                <Link to={'/admin/roles'}>Роли</Link>
                             </BreadcrumbItem>
                             <BreadcrumbItem>
-                                <Link to={`/Admin/roles/${data.id}`}>
+                                <Link to={`/admin/roles/${data.id}`}>
                                     {data.name}
                                 </Link>
                             </BreadcrumbItem>

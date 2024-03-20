@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import { AuthDto, Response } from '../types/dto.ts'
+import { AuthDto, Dto } from '../types/dto.ts'
 
 const BASE_URL = 'http://127.0.0.1:8000/api'
 
@@ -33,7 +33,7 @@ api.interceptors.response.use(
                 // @ts-ignore
                 originalRequest._isRetry = true
                 try {
-                    const response = await axios.get<Response<AuthDto>>(
+                    const response = await axios.get<Dto<AuthDto>>(
                         `${BASE_URL}/refresh`,
                         {
                             withCredentials: true,
@@ -45,7 +45,8 @@ api.interceptors.response.use(
                     )
                     return api.request(originalRequest)
                 } catch (e) {
-                    console.log('НЕ АВТОРИЗОВАН')
+                    localStorage.removeItem('access_token')
+                    throw e
                 }
             }
         }

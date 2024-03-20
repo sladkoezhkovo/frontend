@@ -1,7 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '@/zustand/store'
-import { logout } from '@/service/auth'
+import { AuthService } from '@/service/auth'
 import { Box, Button, Container, Typography } from '@mui/material'
 import { Link } from '@/components/Link'
 
@@ -21,7 +21,7 @@ export const Header = ({ isAdmin }: props) => {
     const navigate = useNavigate()
 
     const { mutate: logoutFn } = useMutation({
-        mutationFn: logout,
+        mutationFn: AuthService.logout,
         onSuccess: () => {
             console.log('logout')
             logoutState()
